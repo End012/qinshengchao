@@ -10,28 +10,37 @@ public class Demo {
     public static final String ERROR_MESSAGE = "Please enter a valid string that can only contain a~z";
 
     public static void main(String[] args) {
-        String inputString = "aabcccbbad";
+        String inputString = "aabcccbbadd";
+        Demo demo = new Demo();
+        String result = demo.resultString(inputString);
+        System.out.println("input:"+ inputString + "-> result:" + result);
+
+
+    }
+
+    public String resultString(String inputString){
         //get the number of consecutive occurrences of each letter in the input string
         List<Integer> countList = getDuplicateCharCount(inputString, new ArrayList<>());
 
         //remove characters with consecutive repetitions greater than 3 count
         removeDuplicateChar(inputString, countList);
-        System.out.println("input:"+ inputString + "-> result:" + (resultList.size() == 0? "": resultList.get(resultList.size() - 1)));
+        String result = (resultList.size() == 0? "": resultList.get(resultList.size() - 1));
         resultList.clear();
-
+        return result;
     }
 
 
-    public static void removeDuplicateChar (String str, List<Integer> countList){
+    public boolean removeDuplicateChar (String str, List<Integer> countList){
+        boolean continueFlag = false;
         Optional<String> optional = Optional.ofNullable(str);
         if(!optional.isPresent()){
-            return ;
+            return continueFlag;
         }
         if(!str.matches(LOWER_CHAR_REGEX)){
             System.out.println(ERROR_MESSAGE);
-            return;
+            return continueFlag;
         }
-        boolean continueFlag = false;
+
         StringBuffer stringBuffer = new StringBuffer();
         int charIndex = 0;
         for (int i = 0; i < countList.size(); i++) {
@@ -56,10 +65,11 @@ public class Demo {
         if(continueFlag){
             removeDuplicateChar(stringBuffer.toString(), getDuplicateCharCount(stringBuffer.toString(), new ArrayList<>()));
         }
+        return continueFlag;
     }
 
 
-    public static List<Integer> getDuplicateCharCount(String str, List<Integer> charCountList){
+    public List<Integer> getDuplicateCharCount(String str, List<Integer> charCountList){
         Optional<String> optional = Optional.ofNullable(str);
         if(!optional.isPresent()){
             return charCountList;
@@ -82,7 +92,7 @@ public class Demo {
     }
 
 
-    public static char beforeChar(char targetChar){
+    public char beforeChar(char targetChar){
         int charInt = targetChar;
         return (char) (charInt - 1);
     }
